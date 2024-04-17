@@ -1,0 +1,70 @@
+[gd_scene load_steps=8 format=3 uid="uid://blaevdqf6x17b"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_hp2ug"]
+[ext_resource type="Texture2D" uid="uid://dlw4bxb7da2rm" path="res://texture_13.png" id="2_eh4pe"]
+[ext_resource type="Script" path="res://main_cam.gd" id="2_k802w"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qe5er"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_rla6p"]
+sky_material = SubResource("ProceduralSkyMaterial_qe5er")
+
+[sub_resource type="Environment" id="Environment_mxyx2"]
+background_mode = 2
+sky = SubResource("Sky_rla6p")
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p1wte"]
+albedo_texture = ExtResource("2_eh4pe")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+
+[node name="main" type="Node3D"]
+script = ExtResource("1_hp2ug")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="instructions_label" type="Label" parent="CanvasLayer/UI"]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 7.0
+offset_right = 171.0
+offset_bottom = 82.0
+text = "[WASD] - Freefly
+[SHIFT] - Move faster
+[CTRL] - Move slower
+[RMB] - View"
+
+[node name="stage" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="stage"]
+environment = SubResource("Environment_mxyx2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="stage"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="env" type="Node3D" parent="."]
+
+[node name="ground" type="CSGBox3D" parent="env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+material_override = SubResource("StandardMaterial3D_p1wte")
+use_collision = true
+size = Vector3(10, 1, 10)
+
+[node name="main_view" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.33668, 2.62318)
+
+[node name="main_cam" type="Camera3D" parent="main_view"]
+current = true
+script = ExtResource("2_k802w")
